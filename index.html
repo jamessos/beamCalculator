@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>Beam Calculator</title>
+    <link rel="stylesheet" href="styles.css">
+
+    <!-- import a math libary-->
+    <script src="http://nerdamer.com/js/nerdamer.core.js"></script>
+    <script src="http://nerdamer.com/js/Algebra.js"></script>
+    <script src="http://nerdamer.com/js/Calculus.js"></script>
+    <script src="http://nerdamer.com/js/Solve.js"></script>
+    <script src="http://nerdamer.com/js/Extra.js"></script>
+
+    <!-- import a math libary that can actually do algebra accureatly-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/7.5.1/math.min.js"></script>
+
+
+    <!-- import a graphing libary -->
+    <!-- <script src="https://cdn.plot.ly/plotly-2.27.0.min.js" charset="utf-8"></script> -->
+    
+
+
+    <!-- import a graphing libary that actually graphs -->
+    <!--<script type="text/javascript" charset="UTF-8" src="https://cdn.jsdelivr.net/npm/jsxgraph/distrib/jsxgraphcore.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/jsxgraph/distrib/jsxgraph.css" />-->
+    
+    <!-- ok this is the third graphing libary i'll try and it better work well -->
+    <script src="https://unpkg.com/function-plot/dist/function-plot.js"></script>
+
+    <!-- this libary is used for making the force envalope thingy because the previous one does not like points -->
+    <!--<script src="https://cdn.jsdelivr.net/npm/chart.js"></script> I don't need this anymore-->
+
+</head>
+<body>
+    <div class = "titleContainer">
+        <div class = "titleText">Beam Calculator</div>
+    </div>
+    <div class = "visualsContainer">  
+        <div class = "loads">
+            <div class = "load reaction" style="left: 5%"></div>
+            <div class = "load reaction" style="left: 93%"></div>
+            <!--<div class = "load" style="left: 50%; --showMag: 0">
+                <div class = "loadEditor">
+                    <div>Magnitude: <input class = "miniInput" type = "text"></div>
+                    <div>Location: <input class = "miniInput" type = "text"></div>
+                </div>
+            </div>-->
+            
+        </div>
+        <div class = "uniformLoads">
+
+        </div>
+        <div class = "loadSets">
+            <!--
+            <div class="loadSet" style="width: 62.7733%; left: 17.5781%; --mouseOffset: 472.5546875;">
+                <div class="load" mag="67 N" style="--showMag: 0; --showEditor: 0; --correspondingIndex: 0; right: 98.407%; width: 3.18607%;"></div>
+                <div class="load" mag="67 N" style="--showMag: 0; --showEditor: 0; --correspondingIndex: 0; right: 77.8462%; width: 3.18607%;"></div>
+                <div class="load" mag="67 N" style="--showMag: 0; --showEditor: 0; --correspondingIndex: 0; right: 58.6873%; width: 3.18607%;"></div>
+                <div class="load" mag="67 N" style="--showMag: 0; --showEditor: 0; --correspondingIndex: 0; right: 38.1266%; width: 3.18607%;"></div>
+                <div class="load" mag="90 N" style="--showMag: 0; --showEditor: 0; --correspondingIndex: 0; right: 18.9677%; width: 3.18607%;"></div>
+                <div class="load" mag="90 N" style="--showMag: 0; --showEditor: 0; --correspondingIndex: 0; right: -1.59303%; width: 3.18607%;"></div>
+                <div class = "loadSetEditor">
+                    <div>Magnitudes: <input class = "miniInput" type = "text"></div>
+                    <div>Location: <input class = "miniInput" type = "text"></div>
+                    <div>Spacing: <input class = "miniInput" type = "text"></div>
+                </div>
+            </div>
+            -->
+        </div>
+        <div class = "bridge">
+            <div class = "pin"></div>
+            <div class = "roller"></div>
+            <div class = "span"></div>
+            <div class = "floor"></div>
+        </div>
+    </div>
+
+    <div class = "settingContainer">
+        <div class = "bridgeSettings">
+
+            <div class = "settingTitle">Beam Information</div>
+            <div class = "settings">
+                <br>
+                <div class = "settingSubtitle">
+                    <button class = "swapButton" id = "prevSection"><</button>
+                    <button class = "swapButton" id = "deleteSection">−</button>
+                    <button class = "swapButton notButton">Section 1/1</button>
+                    <button class = "swapButton" id = "addSection">+</button>
+                    <button class = "swapButton" id = "nextSection">></button>
+                </div>
+                
+                <div class = "enterfield">
+                    Length (mm):
+                    <div class = "spacerButton"></div>
+                    <input id = "L" class = "entry" type = "text", value="1000" placeholder="Value in mm">
+                </div>
+                <div class = "enterfield">
+                    Centroid Location (mm):
+                    <div class = "spacerButton"></div>
+                    <input id = "centroid" class = "entry" type = "text", value="50", placeholder="Value/Expression in mm" disabled>
+                </div>
+                <div class = "enterfield">
+                    2nd Moment of Area (mm^4):
+                    <div class = "spacerButton"></div>
+                    <input id = "I" class = "entry" type = "text", value="10^6", placeholder="Value/Expression in mm^4" disabled>
+                </div>
+
+                <div class = "enterfield">
+                    <div>Current Position (mm):</div>
+                    <div class = "spacerButton"></div>
+                    <input id = "LCurrent" class = "entry" type = "text", value="0", placeholder="Value/Expression in mm" oninput = 'this.nextElementSibling.value = this.value' >
+                    <input type = "range" class = "lengthSelector" oninput = 'this.previousElementSibling.value = this.value'>
+                </div>
+            </div>
+            
+            <br>
+            <div class = "layerInfo">
+                <div class = "settingSubtitle">
+                    <button class = "swapButton" id = "prevLayer"><</button>
+                    <button class = "swapButton" id = "deleteLayer">−</button>
+                    <button class = "swapButton notButton">Layer 1/1</button>
+                    <button class = "swapButton" id = "addLayer">+</button>
+                    <button class = "swapButton" id = "nextLayer">></button>
+                </div>
+                
+                <div class = "enterfield">
+                    Height of layer (mm):
+                    <div class = "spacerButton"></div>
+                    <input id = "H" class = "entry" type = "text", value="100", placeholder="Value/Expression in mm">
+                </div>
+                <div class = "enterfield">
+                    Width respect to % height (mm):
+                    <div class = "spacerButton"></div>
+                    <input id = "wdH" class = "entry" type = "text", value="100", placeholder="Value/Expression in mm">
+                </div>
+                <div class = "enterfield">
+                    % width respect to length (mm):
+                    <div class = "spacerButton"></div>
+                    <input id = "wdL" class = "entry" type = "text", value="1", placeholder="Value/Expression in %">
+                </div>
+                
+            </div>
+
+        </div>
+        
+        <div class = "geometryContainer">
+            <div class = "diagramTitle" style="font-size: 20px;">Cross Section</div>
+            <div class = "diagram" id = "csd"> </div>
+        </div>
+    </div>
+
+    <div class = "graphContainer">
+        <div class = "diagramContainer">
+            <div class = "diagramTitle">Shear Force Diagram</div>
+            <div class = "diagram sfd" id = "sfd"> </div>
+        </div>
+        <div class = "diagramContainer">
+            <div class = "diagramTitle">Bending Moment Diagram</div>
+            <div class = "diagram bmd" id = "bmd"> </div>
+        </div>
+    </div>
+
+    <div class = "verticalGraphContainer">
+        <div class = "graphContainer subgraph">
+            <div class = "diagramContainer">
+                <div class = "diagramTitle">Shear Stress</div>
+            </div>
+            <div class = "diagramContainer">
+                <div class = "diagramTitle">Bending Moment Stress</div>
+            </div>
+        </div>
+
+        <div class = "enterfield">
+            <div>Current Position (mm):</div>
+            <div class = "spacerButton"></div>
+            <input id = "calcLocation" class = "entry" type = "text", value="0", placeholder="Value/Expression in mm" oninput = 'this.nextElementSibling.value = this.value' >
+            <input type = "range" class = "lengthSelector" oninput = 'this.previousElementSibling.value = this.value'>
+        </div>
+        
+        <div class = "graphContainer subgraph">
+            <div class = "diagramContainer">
+                <div class = "diagram" id = "shearStress"> </div>
+            </div>
+            <div class = "diagramContainer">
+                <div class = "diagram" id = "bendingStress"> </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class = "forceComparison graphContainer">
+        <div class = "diagramContainer">
+            <div class = "diagramTitle">Bending Moment Load And Capacity <button id = "bendingForce">Update</button></div>
+            <div class = "diagram" id = "compareBMD"></div>
+            <div id = "FOSTension"> </div>
+            <div id = "FOSCompression"> </div>
+        </div>
+
+        <div class = "diagramContainer">
+            <div class = "diagramTitle">Shear Load And Capacity <button id = "shearForce">Update</button></div>
+            <div class = "diagram" id = "compareSFD"></div>
+            <div id = "FOSShear"> </div>
+        </div>
+
+        <div class = "diagramContainer">
+            <div class = "diagramTitle">Glue Shear Load And Capacity <button id = "glueForce">Update</button></div>
+            <div>Enter Glue Location <input type = "text" id = "glueLocation"></div>
+            <div class = "diagram" id = "compareGlue"></div>
+            <div id = "FOSGlue"> </div>
+        </div>
+
+        <div class = "diagramContainer">
+            <div class = "diagramTitle">Critical Moment Causing Buckling #1<button id = "criticalMoment0">Update</button></div>
+            <div>Enter [section, layer, k, t, b]<input type = "text" id = "momentBucklingInfo0"></div>
+            <div class = "diagram" id = "compareCriticalMoment0"></div>
+            <div id = "FOSBuckleMoment0"> </div>
+        </div>
+        <div class = "diagramContainer">
+            <div class = "diagramTitle">Critical Moment Causing Buckling #2<button id = "criticalMoment1">Update</button></div>
+            <div>Enter [section, layer, k, t, b]] <input type = "text" id = "momentBucklingInfo1"></div>
+            <div class = "diagram" id = "compareCriticalMoment1"></div>
+            <div id = "FOSBuckleMoment1"> </div>
+        </div>
+        <div class = "diagramContainer">
+            <div class = "diagramTitle">Critical Moment Causing Buckling #3<button id = "criticalMoment2">Update</button></div>
+            <div>Enter [section, layer, k, t, b]] <input type = "text" id = "momentBucklingInfo2"></div>
+            <div class = "diagram" id = "compareCriticalMoment2"></div>
+            <div id = "FOSBuckleMoment2"> </div>
+        </div>
+        <div class = "diagramContainer">
+            <div class = "diagramTitle">Critical Moment Causing Buckling #4<button id = "criticalMoment3">Update</button></div>
+            <div>Enter [section, layer, k, t, b] <input type = "text" id = "momentBucklingInfo3"></div>
+            <div class = "diagram" id = "compareCriticalMoment3"></div>
+            <div id = "FOSBuckleMoment3"> </div>
+        </div>
+        <div class = "diagramContainer">
+            <div class = "diagramTitle">Critical Moment Causing Buckling #5<button id = "criticalMoment4">Update</button></div>
+            <div>Enter [section, layer, k, t, b] <input type = "text" id = "momentBucklingInfo4"></div>
+            <div class = "diagram" id = "compareCriticalMoment4"></div>
+            <div id = "FOSBuckleMoment4"> </div>
+        </div>
+        <div class = "diagramContainer">
+            <div class = "diagramTitle">Critical Moment Causing Buckling #6<button id = "criticalMoment5">Update</button></div>
+            <div>Enter [section, layer, k, t, b] <input type = "text" id = "momentBucklingInfo5"></div>
+            <div class = "diagram" id = "compareCriticalMoment5"></div>
+            <div id = "FOSBuckleMoment5"> </div>
+        </div>
+
+        <div class = "diagramContainer">
+            <div class = "diagramTitle">Critical Shear Causing Buckling<button id = "criticalShear">Update</button></div>
+            <div>Enter [section, layer, t, b, a] <input type = "text" id = "shearBucklingInfo"></div>
+            <div class = "diagram" id = "compareCriticalShear"></div>
+            <div id = "FOSBuckleShear"> </div>
+        </div>
+    </div>
+
+    <!-- import the script I wrote-->
+    <script src="script.js"></script>
+</body>
+</html>
